@@ -141,6 +141,21 @@ public class DeviceControlActivity extends Activity {
                             mBluetoothLeService.setCharacteristicNotification(
                                     characteristic, true);
                         }
+                        if ((charaProp | BluetoothGattCharacteristic.PROPERTY_WRITE) > 0) {
+                            final byte[] data = characteristic.getValue();
+
+                            if (data != null && data.length > 0) {
+                                final StringBuilder stringBuilder = new StringBuilder(data.length);
+                                for(byte byteChar : data)
+                                    stringBuilder.append(String.format("%02X ", byteChar));
+
+                                Log.d(TAG,"Edited_data--"+stringBuilder.toString());
+                            }
+                            characteristic.setValue("BA 29 39 09 08 10 17 FF 0F 00 00 00 00 64 64 08 45 F2 A0 2C".getBytes());
+                            mBluetoothLeService.writeCharacteristic(characteristic);
+                            Log.d(TAG,"into If");
+
+                        }else Log.d(TAG,"into Else");
                         return true;
                     }
                     return false;
